@@ -1,0 +1,13 @@
+# 4-postgres-init-sql-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-init-sql-configmap
+  namespace: dotnet-app
+data:
+  init.sql: |
+    CREATE TABLE IF NOT EXISTS temperature_records (
+      id SERIAL PRIMARY KEY,
+      temperature_c INT NOT NULL,
+      recorded_at TIMESTAMP WITHOUT TIME ZONE NOT NULL
+    );

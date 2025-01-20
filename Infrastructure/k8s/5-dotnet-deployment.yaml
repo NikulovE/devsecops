@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dotnet-deployment
+  namespace: dotnet-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dotnet-weather
+  template:
+    metadata:
+      labels:
+        app: dotnet-weather
+    spec:
+      containers:
+      - name: dotnet-container
+        image: registry.tehlab.org:5000/dotnet-weather-api:latest
+        ports:
+          - containerPort: 80
+        env:
+          - name: ConnectionStrings__WeatherDb
+            value: "Host=postgres-svc.dotnet-app.svc.cluster.local;Port=5432;Database=weatherdb;Username=weatheruser;Password=weatherpass"

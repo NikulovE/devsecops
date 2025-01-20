@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-deployment
+  namespace: dotnet-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:15.2
+        env:
+          - name: POSTGRES_DB
+            value: "weatherdb"
+          - name: POSTGRES_USER
+            value: "weatheruser"
+          - name: POSTGRES_PASSWORD
+            value: "weatherpass"
+        ports:
+          - containerPort: 5432
+        volumeMounts:
+          - name: init-sql
+            mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: init-sql
+          configMap:
+            name: postgres-init-sql-configmap
